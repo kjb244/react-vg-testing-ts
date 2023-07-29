@@ -1,26 +1,52 @@
-import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {Col, Container, Row} from "react-bootstrap";
+import {Navigate, Route, Routes} from "react-router-dom";
+import Splash from "./components/splash";
+import View1 from "./components/view1";
+import RouteWorker from "./components/route-worker";
+import {connect, ConnectedProps} from "react-redux";
+import View2 from "./components/view2";
+import {StateModel} from "./models/state.model";
+import {AppModel} from "./models/app.model";
 
-function App() {
+function App(props: AppModel) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Container>
+        <RouteWorker/>
+        <Row>
+          <Col>
+            <Routes>
+              <Route path='/splash' element={<Splash/>}/>
+              <Route path='/view1' element={props.currRoute ?
+                  <View1/> :
+                  <Navigate to='/splash' replace/>}
+              />
+              <Route path='/view2' element={<View2/>}/>
+              <Route path='/fake' element={props.currRoute ?
+                  <Navigate to='/view1' replace/> :
+                  <Navigate to='/splash' replace/>}
+              />
+              <Route path='*' element={<Navigate to="/splash" replace />} />
+
+            </Routes>
+
+
+          </Col>
+        </Row>
+      </Container>
+
   );
 }
 
-export default App;
+const mapStateToProps =(state: StateModel) => {
+  return{
+    currRoute: state.currRoute
+  }
+};
+
+const connector = connect(mapStateToProps)
+
+export type propsFromRedux = ConnectedProps<typeof connector>;
+
+
+export default connector(App);

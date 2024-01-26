@@ -119,7 +119,7 @@ function View1 (){
         <>
             <Form.Group>
                 <Row>
-                    <Col sm={12} md={6}>
+                    <Col sm={12}>
                         <Form.Label>First Name</Form.Label>
                         <Form.Control
                             type="text"
@@ -137,7 +137,7 @@ function View1 (){
                         />
                         {showError(FieldNames.firstName)}
                     </Col>
-                    <Col sm={12} md={6}>
+                    <Col sm={12}>
                         <Form.Label>Last Name</Form.Label>
                         <Form.Control
                             type="text"

@@ -31,5 +31,4 @@ const connector = connect(mapStateToProps);
 export type propsFromRedux = ConnectedProps<typeof connector>;
 
 
-
 export default connector(RouteWorker);

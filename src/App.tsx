@@ -13,7 +13,7 @@ function App(props: AppModel) {
   return (
       <Container>
         <RouteWorker/>
-        <Row>
+        <Row style={{marginTop: '20px'}}>
           <Col>
             <Routes>
               <Route path='/splash' element={<Splash/>}/>

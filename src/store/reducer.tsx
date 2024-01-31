@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {StateModel} from "../models/state.model";
-import {ActionModel, MoveValues} from "../models/action.model";
+import {ActionModel, AddDeleteCartValues, MoveValues} from "../models/action.model";
+import {CartModel} from "../models/cart.model";
 
 class Reducer extends Component{
     constructor(props?: any){
@@ -19,7 +20,17 @@ class Reducer extends Component{
                 prev: null,
                 next: 'view2'
             }
-        }
+        },
+        cartData: [
+            {
+                product: 'blueberries',
+                inCart: false
+            },
+            {
+                product: 'cabbage',
+                inCart: false
+            }
+        ]
     }
 
 
@@ -45,6 +56,21 @@ class Reducer extends Component{
                     routesVisited: [...newState.routesVisited, nextRoute || ''],
                     currRoute: nextRoute
                 }
+                break;
+            case 'ADD_DELETE_CART':
+                const isAdd = action?.values?.addDeleteCart?.type === AddDeleteCartValues.ADD;
+                const product = action?.values?.addDeleteCart?.product;
+                newState = {
+                    ...newState,
+                    cartData: newState.cartData.map((value: CartModel) =>{
+                        if(value.product === product){
+                            value.inCart = isAdd;
+                        }
+                        return value;
+                    })
+                }
+
+
                 break;
         }
 

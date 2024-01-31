@@ -8,10 +8,13 @@ import {connect, ConnectedProps} from "react-redux";
 import View2 from "./components/view2";
 import {StateModel} from "./models/state.model";
 import {AppModel} from "./models/app.model";
+import View3 from "./components/view3";
+import Navigation from "./components/Navigation";
 
 function App(props: AppModel) {
   return (
       <Container>
+        <Navigation/>
         <RouteWorker/>
         <Row style={{marginTop: '20px'}}>
           <Col>
@@ -26,6 +29,7 @@ function App(props: AppModel) {
                   <Navigate to='/view1' replace/> :
                   <Navigate to='/splash' replace/>}
               />
+              <Route path='/view3' element={<View3/>}/>
               <Route path='*' element={<Navigate to="/splash" replace />} />
 
             </Routes>

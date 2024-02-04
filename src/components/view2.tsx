@@ -24,7 +24,7 @@ function View2 ()  {
             linkHref: 'https://www.google.com'
         }
     ]
-    const [nudgeList, setNudgeList] = useState<NudgeModel[]>(n);
+    const [nudgeList] = useState<NudgeModel[]>(n);
 
     return (
         <>

@@ -5,7 +5,7 @@ import {StateContext} from "../providers/state.context";
 
 
 function Navigation(){
-    const {coreData, setCoreData} = useContext(StateContext);
+    const {coreData} = useContext(StateContext);
 
     function getCartCount(){
         return coreData.cartData.filter(e => e.inCart).length;

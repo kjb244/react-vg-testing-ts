@@ -29,7 +29,6 @@ function Splash ()  {
 
         },3000)
     },[]);
-    // @ts-ignore
     return (
         <>
             <Modal show={showModal}>

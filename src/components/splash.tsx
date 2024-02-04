@@ -1,19 +1,35 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Modal, Spinner} from "react-bootstrap";
-import {connect, ConnectedProps} from "react-redux";
-import {ActionModel, ActionType} from "../models/action.model";
-import {Dispatch} from "redux";
-import {SplashModel} from "../models/splash.model";
+import {StateContext} from "../providers/state.context";
+import { useNavigate } from 'react-router-dom';
 
 
-function Splash (props: SplashModel)  {
+
+function Splash ()  {
     const [showModal, setShowModal] = useState(true);
+    const {coreData, setCoreData} = useContext(StateContext);
+    const navigate = useNavigate();
     useEffect(() => {
         setTimeout(() =>{
+
+            setCoreData({
+                ...coreData,
+                currRoute: 'view1',
+                routesVisited: ['splash', 'view1'],
+                ajaxData: {
+                    bpm: {
+                        case: '123'
+                    },
+                    name: ['kevin']
+                },
+                cartData: [...coreData?.cartData || []]
+            })
             setShowModal(false);
-            props.splashAjaxComplete();
+            navigate('/view1');
+
         },3000)
     },[]);
+    // @ts-ignore
     return (
         <>
             <Modal show={showModal}>
@@ -29,18 +45,7 @@ function Splash (props: SplashModel)  {
 }
 
 
-const mapDispatchToProps = (dispatch: Dispatch<ActionModel>) => {
-    return {
-        splashAjaxComplete: ()=> dispatch({type: ActionType.SPLASH_AJAX_COMPLETE}),
-
-
-    }
-};
-
-const connector = connect(null,mapDispatchToProps)
-
-export type propsFromRedux = ConnectedProps<typeof connector>;
 
 
 
-export default connector(Splash);
+export default Splash;

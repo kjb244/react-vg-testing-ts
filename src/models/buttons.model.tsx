@@ -1,5 +1,4 @@
-import {propsFromRedux} from "../components/buttons";
 
-export interface ButtonProps extends propsFromRedux {
+export interface ButtonProps {
     shouldSubmit: Function
 }

@@ -1,10 +1,18 @@
-import {CartModel} from "./cart.model";
+export type StateTypeContext = {
+    coreData: CoreData,
+    setCoreData: (coreData: CoreData) => void;
+}
 
-export interface StateModel {
-    routesVisited: string[];
-    currRoute: string | null ;
-    routeMapping: Record<string, NextPrev>,
-    cartData: CartModel[]
+export interface CoreData  {
+    routesVisited: string[] | null;
+    currRoute: string | null;
+    routeMapping: Record<string, NextPrev>;
+    ajaxData: {
+        bpm: Record<string,string>;
+        name: string[];
+    },
+    cartData: Product[]
+
 }
 
 export interface NextPrev {
@@ -12,3 +20,8 @@ export interface NextPrev {
     prev: string | null;
 }
 
+
+export interface Product {
+    product: string;
+    inCart: boolean;
+}

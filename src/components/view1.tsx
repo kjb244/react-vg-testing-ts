@@ -1,8 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from "react-redux";
+import React, {useState} from 'react';
 import {Col, Form, Row} from "react-bootstrap";
 import Buttons from "./buttons";
-import {StateModel} from "../models/state.model";
 import {
     ErrorField,
     ErrorMapping,

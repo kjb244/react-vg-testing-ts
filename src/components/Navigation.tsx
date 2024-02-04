@@ -1,14 +1,14 @@
 import {Badge, Button, Col, Container, Navbar} from "react-bootstrap";
-import {StateModel} from "../models/state.model";
-import {connect, ConnectedProps} from "react-redux";
-import {NavigationModel} from "../models/navigation.model";
+import {useContext} from "react";
+import {StateContext} from "../providers/state.context";
 
 
 
-function Navigation(props: NavigationModel){
+function Navigation(){
+    const {coreData, setCoreData} = useContext(StateContext);
 
     function getCartCount(){
-        return props.products.filter(e => e.inCart).length;
+        return coreData.cartData.filter(e => e.inCart).length;
     }
 
     return (
@@ -27,16 +27,6 @@ function Navigation(props: NavigationModel){
 
 }
 
-const mapStateToProps =(state: StateModel) => {
-    return{
-        products: state.cartData
-    }
-};
 
-const connector = connect(mapStateToProps);
-
-export type propsFromRedux = ConnectedProps<typeof connector>;
-
-
-export default connector(Navigation);
+export default Navigation
 

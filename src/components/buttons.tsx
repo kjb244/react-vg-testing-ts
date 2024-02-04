@@ -1,62 +1,55 @@
-import {connect, ConnectedProps} from "react-redux";
-import React from 'react';
+import React, {useContext} from 'react';
 import {Button} from "react-bootstrap";
-import {StateModel} from "../models/state.model";
-import {Dispatch} from "redux";
-import {ActionModel, ActionType, MoveValues} from "../models/action.model";
 import {ButtonProps} from "../models/buttons.model";
+import { StateContext} from "../providers/state.context";
+import {useNavigate} from "react-router-dom";
+import {CoreData} from "../models/state.model";
 
 
-function disablePrev(props: ButtonProps){
-    if((props.routeMapping[props.currRoute || ''] || {}).prev){
-        return false;
+
+function disablePrev(coreData: CoreData){
+    const currRoute = coreData.currRoute;
+    if(!coreData.routeMapping[currRoute || ''].prev){
+        return true;
     }
-    return true;
+    return false;
 }
 
-function disableNext(props: ButtonProps){
-    if((props.routeMapping[props.currRoute || ''] || {}).next){
-        return false;
+function disableNext(coreData: CoreData){
+
+    const currRoute = coreData.currRoute;
+    if(!coreData.routeMapping[currRoute || ''].next){
+        return true;
     }
-    return true;
+    return false;
 }
 
 
 function Buttons(props: ButtonProps){
+    const {coreData} = useContext(StateContext);
+    const navigate = useNavigate();
+
 
     function clickNext(){
         if(props.shouldSubmit() === true){
-            props.moveRoute(MoveValues.FORWARD);
+            const currRoute = coreData.currRoute;
+            const nextRoute = coreData.routeMapping[currRoute || ''].next || '';
+            navigate('/' + nextRoute);
+
+
         }
     }
 
 
     return (
         <>
-            <Button disabled={disablePrev(props)} style={{marginRight: '20px'}} variant="primary" >Previous</Button>
-            <Button disabled={disableNext(props)} variant="primary" onClick={clickNext}>Next</Button>
+            <Button disabled={disablePrev(coreData)} style={{marginRight: '20px'}} variant="primary" >Previous</Button>
+            <Button disabled={disableNext(coreData)} variant="primary" onClick={clickNext}>Next</Button>
         </>
 
     )
 }
 
-const mapStateToProps =(state: StateModel) => {
-    return{
-        routeMapping: state.routeMapping,
-        currRoute: state.currRoute
-    }
-};
-
-const mapDispatchToProps = (dispatch: Dispatch<ActionModel>) => {
-    return {
-        moveRoute: (type: MoveValues)=> dispatch({type: ActionType.MOVE_ROUTE, values: {move: type}}),
-
-    }
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps)
-
-export type propsFromRedux = ConnectedProps<typeof connector>;
 
 
-export default connector(Buttons);
+export default  Buttons;

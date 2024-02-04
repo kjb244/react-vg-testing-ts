@@ -3,33 +3,76 @@ import {Col, Container, Row} from "react-bootstrap";
 import {Navigate, Route, Routes} from "react-router-dom";
 import Splash from "./components/splash";
 import View1 from "./components/view1";
-import RouteWorker from "./components/route-worker";
-import {connect, ConnectedProps} from "react-redux";
 import View2 from "./components/view2";
-import {StateModel} from "./models/state.model";
-import {AppModel} from "./models/app.model";
 import View3 from "./components/view3";
+import {StateContext} from "./providers/state.context";
+import {useState} from "react";
 import Navigation from "./components/Navigation";
+import {CoreData} from "./models/state.model";
 
-function App(props: AppModel) {
-  return (
+const initialState: CoreData = {
+    routesVisited: null,
+    currRoute: null,
+    routeMapping: {
+        splash: {
+            next: 'view1',
+            prev: null
+        },
+        view1: {
+            prev: null,
+            next: 'view2'
+        }
+    },
+    ajaxData: {
+        bpm: {},
+        name: []
+    },
+    cartData: [
+        {
+            product: 'blueberries',
+            inCart: false
+        },
+        {
+            product: 'cabbage',
+            inCart: false
+        }
+    ]
+}
+
+function App() {
+
+    const [coreData, setCoreData] = useState<CoreData>(initialState);
+    return (
       <Container>
-        <Navigation/>
-        <RouteWorker/>
+          <StateContext.Provider value={{coreData, setCoreData}}>
+              <Navigation/>
+          </StateContext.Provider>
         <Row style={{marginTop: '20px'}}>
           <Col>
             <Routes>
-              <Route path='/splash' element={<Splash/>}/>
-              <Route path='/view1' element={props.currRoute ?
-                  <View1/> :
-                  <Navigate to='/splash' replace/>}
+              <Route path='/splash' element={
+                  <StateContext.Provider value={{coreData, setCoreData}}>
+                    <Splash/>
+                  </StateContext.Provider>
+                  }
+              />
+              <Route path='/view1' element={
+                  <StateContext.Provider value={{coreData, setCoreData}}>
+                      {coreData.currRoute ?  <View1/> : <Navigate to='/splash' replace/>}
+                  </StateContext.Provider>
+                }
               />
               <Route path='/view2' element={<View2/>}/>
-              <Route path='/fake' element={props.currRoute ?
-                  <Navigate to='/view1' replace/> :
-                  <Navigate to='/splash' replace/>}
-              />
-              <Route path='/view3' element={<View3/>}/>
+                <Route path='/fake' element={coreData.currRoute ?
+                    <Navigate to='/view1' replace/> :
+                    <Navigate to='/splash' replace/>}
+                />
+                <Route path='/view3' element={
+                    <StateContext.Provider value={{coreData, setCoreData}}>
+                        <View3/>
+                    </StateContext.Provider>
+                }
+                />
               <Route path='*' element={<Navigate to="/splash" replace />} />
 
             </Routes>
@@ -39,18 +82,10 @@ function App(props: AppModel) {
         </Row>
       </Container>
 
-  );
+    );
 }
 
-const mapStateToProps =(state: StateModel) => {
-  return{
-    currRoute: state.currRoute
-  }
-};
-
-const connector = connect(mapStateToProps)
-
-export type propsFromRedux = ConnectedProps<typeof connector>;
 
 
-export default connector(App);
+
+export default App;

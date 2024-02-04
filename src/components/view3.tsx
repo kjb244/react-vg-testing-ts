@@ -1,28 +1,51 @@
-import {StateModel} from "../models/state.model";
-import {connect, ConnectedProps} from "react-redux";
-import {View3Model} from "../models/view3.model";
 import {Button, Col, Row} from "react-bootstrap";
-import {CartModel} from "../models/cart.model";
-import {Dispatch} from "redux";
-import {ActionModel, ActionType, AddDeleteCartValues} from "../models/action.model";
+import {useContext} from "react";
+import {StateContext} from "../providers/state.context";
+import {Product} from "../models/state.model";
 
 
-function View3(props: View3Model){
-    const inCartProducts = props.products.filter(e => e.inCart);
-    const notInCartProducts = props.products.filter(e => !e.inCart);
+function View3(){
+    const {coreData, setCoreData} = useContext(StateContext);
+
+    const inCartProducts: Product[] = coreData.cartData.filter(e => e.inCart);
+    const notInCartProducts: Product[] = coreData.cartData.filter(e => !e.inCart);
+
+    function deleteCart(product: Product){
+        setCoreData({
+            ...coreData,
+            cartData: coreData.cartData.map((e: Product) =>{
+                if(e.product === product.product){
+                    e.inCart = false;
+                }
+                return e;
+            })
+        })
+    }
+
+    function addCart(product: Product){
+        setCoreData({
+            ...coreData,
+            cartData: coreData.cartData.map((e: Product) =>{
+                if(e.product === product.product){
+                    e.inCart = true;
+                }
+                return e;
+            })
+        })
+    }
     return (
         <>
             <Row>
                 <Col sm={6}>
                     <h3>In Cart</h3>
-                    {inCartProducts.map((e: CartModel) =>{
+                    {inCartProducts.map((e: Product) =>{
                         return (
                             <Row key={e.product}>
                                 <Col sm={9}>
                                     {e.product}
                                 </Col>
                                 <Col sm={3} className='mt-3'>
-                                    <Button variant='primary' onClick={() =>{props.deleteCart(e.product)}}>Delete</Button>
+                                    <Button variant='primary' onClick={() =>{deleteCart(e)}}>Delete</Button>
                                 </Col>
 
                             </Row>
@@ -31,14 +54,14 @@ function View3(props: View3Model){
                 </Col>
                 <Col smm={6}>
                     <h3>Not In Cart</h3>
-                    {notInCartProducts.map((e: CartModel) =>{
+                    {notInCartProducts.map((e: Product) =>{
                         return (
                             <Row key={e.product}>
                                 <Col sm={9}>
                                     {e.product}
                                 </Col>
                                 <Col sm={3} className='mt-3'>
-                                    <Button variant='primary' onClick={() =>{props.addCart(e.product)}}>Add</Button>
+                                    <Button variant='primary' onClick={() =>{addCart(e)}}>Add</Button>
                                 </Col>
 
                             </Row>
@@ -52,39 +75,5 @@ function View3(props: View3Model){
     )
 }
 
-const mapStateToProps =(state: StateModel) => {
-    return{
-        products: state.cartData
-    }
-};
-const mapDispatchToProps = (dispatch: Dispatch<ActionModel>) => {
-    return {
-        addCart: (product: string)=>
-            dispatch({
-                type: ActionType.ADD_DELETE_CART,
-                values: {
-                    addDeleteCart: {
-                        type: AddDeleteCartValues.ADD,
-                        product
-                    }
-                }
-            }),
-        deleteCart: (product: string)=>
-            dispatch({
-                type: ActionType.ADD_DELETE_CART,
-                values: {
-                    addDeleteCart: {
-                        type: AddDeleteCartValues.DELETE,
-                        product
-                    }
-                }
-            }),
-    }
-};
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export type propsFromRedux = ConnectedProps<typeof connector>;
-
-
-export default connector(View3);
+export default View3

@@ -9,6 +9,7 @@ import {StateContext} from "./providers/state.context";
 import {useState} from "react";
 import Navigation from "./components/Navigation";
 import {CoreData} from "./models/state.model";
+import View4 from "./components/view4";
 
 const initialState: CoreData = {
     routesVisited: null,
@@ -73,6 +74,7 @@ function App() {
                     </StateContext.Provider>
                 }
                 />
+                <Route path='/view4' element={<View4/>}/>
               <Route path='*' element={<Navigate to="/splash" replace />} />
 
             </Routes>

@@ -52,7 +52,7 @@ function View3(){
                         )
                     })}
                 </Col>
-                <Col smm={6}>
+                <Col sm={6}>
                     <h3>Not In Cart</h3>
                     {notInCartProducts.map((e: Product) =>{
                         return (

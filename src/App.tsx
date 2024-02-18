@@ -6,7 +6,7 @@ import View1 from "./components/view1";
 import View2 from "./components/view2";
 import View3 from "./components/view3";
 import {StateContext} from "./providers/state.context";
-import React, {PropsWithChildren, useState} from "react";
+import React, {useState} from "react";
 import Navigation from "./components/Navigation";
 import {CoreData, EnvironmentProperties, EnvironmentType} from "./models/state.model";
 import View4 from "./components/view4";
@@ -49,8 +49,6 @@ const initialEnvironment: EnvironmentProperties = {
 
 
 
-
-// @ts-ignore
 function App() {
 
     const [coreData, setCoreData] = useState<CoreData>(initialCoreData);

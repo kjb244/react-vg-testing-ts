@@ -1,3 +1,19 @@
+export type EnvironmentTypeContext = {
+    environmentProperties: EnvironmentProperties,
+    setEnvironmentProperties: (environmentProperties: EnvironmentProperties) => void
+}
+
+export interface EnvironmentProperties {
+    isInternal: boolean | null,
+    type: EnvironmentType | null
+}
+
+export enum EnvironmentType {
+    LOCAL = 'LOCAL',
+    DEV = 'DEV',
+    PROD = 'PROD'
+}
+
 export type StateTypeContext = {
     coreData: CoreData,
     setCoreData: (coreData: CoreData) => void;

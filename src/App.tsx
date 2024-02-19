@@ -11,6 +11,7 @@ import Navigation from "./components/Navigation";
 import {CoreData, EnvironmentProperties, EnvironmentType} from "./models/state.model";
 import View4 from "./components/view4";
 import {EnvironmentContext} from "./providers/environment-context";
+import {MultiProvider} from "./providers/multiprovider";
 
 
 const initialCoreData: CoreData = {
@@ -49,6 +50,7 @@ const initialEnvironment: EnvironmentProperties = {
 
 
 
+
 function App() {
 
     const [coreData, setCoreData] = useState<CoreData>(initialCoreData);
@@ -56,41 +58,45 @@ function App() {
 
     return (
       <Container>
-          <StateContext.Provider value={{coreData, setCoreData}}>
-              <EnvironmentContext.Provider value={{environmentProperties, setEnvironmentProperties}}>
-                  <Navigation/>
-                  <Row style={{marginTop: '20px'}}>
-                      <Col>
-                          <Routes>
-                              <Route path='/splash' element={
-                                  <Splash/>
-                              }
-                              />
-                              <Route path='/view1' element={
-                                  coreData.currRoute ?  <View1/> : <Navigate to='/splash' replace/>
-                              }
-                              />
-                              <Route path='/view2' element={<View2/>}/>
-                              <Route path='/fake' element={coreData.currRoute ?
-                                  <Navigate to='/view1' replace/> :
-                                  <Navigate to='/splash' replace/>}
-                              />
-                              <Route path='/view3' element={
-                                <View3/>
-                                }
-                              />
-                              <Route path='/view4' element={<View4/>}/>
-                              <Route path='*' element={<Navigate to="/splash" replace />} />
+          <MultiProvider
+              providers={[
+                  <StateContext.Provider value={{coreData, setCoreData}} />,
+                  <EnvironmentContext.Provider value={{environmentProperties, setEnvironmentProperties}} />
+              ]}
+          >
+              <Navigation/>
+              <Row style={{marginTop: '20px'}}>
+                  <Col>
+                      <Routes>
+                          <Route path='/splash' element={
+                              <Splash/>
+                          }
+                          />
+                          <Route path='/view1' element={
+                              coreData.currRoute ?  <View1/> : <Navigate to='/splash' replace/>
+                          }
+                          />
+                          <Route path='/view2' element={<View2/>}/>
+                          <Route path='/fake' element={coreData.currRoute ?
+                              <Navigate to='/view1' replace/> :
+                              <Navigate to='/splash' replace/>}
+                          />
+                          <Route path='/view3' element={
+                              <View3/>
+                          }
+                          />
+                          <Route path='/view4' element={<View4/>}/>
+                          <Route path='*' element={<Navigate to="/splash" replace />} />
 
-                          </Routes>
+                      </Routes>
 
 
-                      </Col>
-                  </Row>
+                  </Col>
+              </Row>
+          </MultiProvider>
 
-              </EnvironmentContext.Provider>
 
-          </StateContext.Provider>
+
       </Container>
 
     );
